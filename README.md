@@ -1,7 +1,7 @@
 # Arquitectura Hexagonal con Typescript + NodeJS + Express
 
 ## Arquitectura hexagonal
-```plaintext
+
 La arquitectura hexagonal promueve la flexibilidad, la mantenibilidad y la capacidad de prueba del software al desacoplar la lógica de negocio de las dependencias externas. Esto permite:
 
 - Cambiar las tecnologías externas sin afectar la lógica de negocio.
@@ -9,7 +9,7 @@ La arquitectura hexagonal promueve la flexibilidad, la mantenibilidad y la capac
 - Adaptar la aplicación a diferentes contextos y necesidades.
 
 Es una arquitectura muy utilizada en el desarrollo de microservicios y en aplicaciones que requieren un alto grado de flexibilidad y capacidad de adaptación.
-```
+
 
 ![Architecture Hexagonal](https://miro.medium.com/v2/resize:fit:720/format:webp/1*yR4C1B-YfMh5zqpbHzTyag.png)
 
@@ -64,9 +64,9 @@ src/
 
 ## Principios solid
 
-```
+
 Los principios SOLID son un conjunto de cinco principios de diseño en la programación orientada a objetos (POO) que buscan crear software más comprensible, flexible y fácil de mantener. Cada letra del acrónimo SOLID representa un principio clave
-```
+
 
 ![Solid Principles](https://miro.medium.com/v2/resize:fit:720/format:webp/1*aDsxDnXogDwWCpccSiHbcg.png)
 
