@@ -1,8 +1,8 @@
 import { Router } from "express";
 
 import { UsersController } from "./users.controller";
-import { UsersDatasourceImpl } from "../infraestructure/datasources/users.datasource.impl";
-import { UsersRepositoryImpl } from "../infraestructure/repositories/users.repository.impl";
+import { UserDatasourceImpl } from "../infraestructure/datasources/users.datasource.impl";
+import { UserRepositoryImpl } from "../infraestructure/repositories/users.repository.impl";
 
 export class UsersRoutes {
 
@@ -10,8 +10,8 @@ export class UsersRoutes {
         const routes = Router();
 
         // Dependency Injection
-        const usersDatasource = new UsersDatasourceImpl()
-        const usersReposotory = new UsersRepositoryImpl(usersDatasource)
+        const usersDatasource = new UserDatasourceImpl()
+        const usersReposotory = new UserRepositoryImpl(usersDatasource)
         const controller = new UsersController(usersReposotory);
 
         // localhost:3000/api/users

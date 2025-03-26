@@ -1,22 +1,23 @@
 import { Request, Response } from "express";
 
-import { CreateUser } from "../application/create-user.use-case";
-import { CreateUserDto } from "../domain/dtos/create-user.dto";
-import { FindAllUsers } from "../application/find-all-users.use-case";
-import { FindOneUser } from "../application/find-one-user.use-case";
+import { CreateUserUseCase } from "../application/use-cases/create-user.use-case";
+import { CreateUserDto } from "../application/dtos/create-user.dto";
+import { FindAllUsersUseCase } from "../application/use-cases/find-all-users.use-case";
+import { FindOneUserUseCase } from "../application/use-cases/find-one-user.use-case";
 import { Handler } from "../../common/errors/handler.error";
 import { PaginationDto } from "../../common/dtos/pagination/pagination.dto";
-import { RemoveUser } from "../application/remove-user.use-case";
-import { UpdateUser } from "../application/update-user.use-case";
-import { UpdateUserDto } from "../domain/dtos/update-user.dto";
-import { UsersRepository } from "../domain/repositories/users.repository";
+import { RemoveUserUseCase } from "../application/use-cases/remove-user.use-case";
+import { UpdateUserUseCase } from "../application/use-cases/update-user.use-case";
+import { UpdateUserDto } from "../application/dtos/update-user.dto";
+import { UserRepository } from "../domain/repositories/user.repository";
+
 
 type HandlerError = (error: unknown, res: Response) => void;
 
 export class UsersController {
 
     constructor(
-        private readonly usersRepository: UsersRepository,
+        private readonly userRepository: UserRepository,
         private readonly handlerError: HandlerError = Handler.error // Error Handler
     ) { }
 
@@ -28,7 +29,7 @@ export class UsersController {
         }
 
         // Use Case
-        new CreateUser(this.usersRepository).execute(createUserDto!)
+        new CreateUserUseCase(this.userRepository).execute(createUserDto!)
             .then(users => res.json(users))
             .catch(error => this.handlerError(error, res));
     }
@@ -41,7 +42,7 @@ export class UsersController {
         }
 
         // Use Case
-        new FindAllUsers(this.usersRepository).execute(paginationDto!)
+        new FindAllUsersUseCase(this.userRepository).execute(paginationDto!)
             .then(users => res.json(users))
             .catch(error => this.handlerError(error, res));
     }
@@ -49,7 +50,7 @@ export class UsersController {
     findOne = (req: Request, res: Response) => {
 
         // Use Case
-        new FindOneUser(this.usersRepository).execute(req.params.id)
+        new FindOneUserUseCase(this.userRepository).execute(req.params.id)
             .then(users => res.json(users))
             .catch(error => this.handlerError(error, res));
     }
@@ -62,7 +63,7 @@ export class UsersController {
         }
 
         // Use Case
-        new UpdateUser(this.usersRepository).execute(req.params.id, updateUserDto!)
+        new UpdateUserUseCase(this.userRepository).execute(req.params.id, updateUserDto!)
             .then(users => res.json(users))
             .catch(error => this.handlerError(error, res));
     }
@@ -70,7 +71,7 @@ export class UsersController {
     remove = (req: Request, res: Response) => {
 
         // Use Case
-        new RemoveUser(this.usersRepository).execute(req.params.id)
+        new RemoveUserUseCase(this.userRepository).execute(req.params.id)
             .then(users => res.json(users))
             .catch(error => this.handlerError(error, res));
     }

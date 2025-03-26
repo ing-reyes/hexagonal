@@ -1,14 +1,14 @@
 import { ApiAllResponse, ApiOneResponse } from "../../../common/interfaces/api-response.interface";
-import { CreateUserDto } from "../../domain/dtos/create-user.dto";
+import { CreateUserContract } from "../../domain/contracts/create-user.contract";
 import { HttpStatus } from "../../../common/enums/http-status.enum";
 import { ManagerError } from "../../../common/errors/manager.error";
-import { PaginationDto } from "../../../common/dtos/pagination/pagination.dto";
-import { UpdateUserDto } from "../../domain/dtos/update-user.dto";
+import { PaginationContract } from "../../domain/contracts/pagination.contract";
+import { UpdateUserContract } from "../../domain/contracts/update-user.contract";
 import { User } from "../../domain/entities/user.entity";
 import { UserRole } from "../../domain/enums/user.role";
-import { UsersDatasource } from "../../domain/datasources/users.datasource";
+import { UserDatasource } from "../../domain/datasources/user.datasource";
 
-export class UsersDatasourceImpl implements UsersDatasource {
+export class UserDatasourceImpl implements UserDatasource {
     private readonly users: User[] = [
         { id: '1', name: 'User 1', email: 'user1@gmail.com', password: '123456', roles: [UserRole.USER] },
         { id: '2', name: 'User 2', email: 'user2@gmail.com', password: '123456', roles: [UserRole.USER] },
@@ -18,9 +18,9 @@ export class UsersDatasourceImpl implements UsersDatasource {
         { id: '6', name: 'User 6', email: 'user6@gmail.com', password: '123456', roles: [UserRole.USER] },
     ];
 
-    async create(createUserDto: CreateUserDto): Promise<ApiOneResponse<User>> {
+    async create(createUserContract: CreateUserContract): Promise<ApiOneResponse<User>> {
         try {
-            const user = { ...createUserDto, id: (this.users.length + 1).toString(), roles: [UserRole.USER] };
+            const user = { ...createUserContract, id: (this.users.length + 1).toString(), roles: [UserRole.USER] };
             this.users.push(user);
             
             return {
@@ -38,8 +38,8 @@ export class UsersDatasourceImpl implements UsersDatasource {
         }
     }
 
-    async findAll(paginationDto: PaginationDto): Promise<ApiAllResponse<User>> {
-        const { page, limit } = paginationDto;
+    async findAll(paginationContract: PaginationContract): Promise<ApiAllResponse<User>> {
+        const { page, limit } = paginationContract;
         try {
             return {
                 status: {
@@ -79,7 +79,7 @@ export class UsersDatasourceImpl implements UsersDatasource {
         }
     }
 
-    async update(id: string, updateUserDto: UpdateUserDto): Promise<ApiOneResponse<User>> {
+    async update(id: string, updateUserContract: UpdateUserContract): Promise<ApiOneResponse<User>> {
         throw new Error("Method not implemented.");
     }
     async remove(id: string): Promise<ApiOneResponse<User>> {
