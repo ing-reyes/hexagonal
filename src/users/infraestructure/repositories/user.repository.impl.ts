@@ -5,10 +5,14 @@ import { UpdateUserContract } from "../../domain/contracts/update-user.contract"
 import { User } from "../../domain/entities/user.entity";
 import { UserDatasource } from "../../domain/datasources/user.datasource";
 import { UserRepository } from "../../domain/repositories/user.repository";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../../common/types/inversify.type";
 
+@injectable()
 export class UserRepositoryImpl implements UserRepository {
 
     constructor(
+        @inject(TYPES.UserDatasource)
         private readonly userDatasource: UserDatasource,
     ) { }
 

@@ -7,7 +7,9 @@ import { UpdateUserContract } from "../../domain/contracts/update-user.contract"
 import { User } from "../../domain/entities/user.entity";
 import { UserRole } from "../../domain/enums/user.role";
 import { UserDatasource } from "../../domain/datasources/user.datasource";
+import { injectable } from "inversify";
 
+@injectable()
 export class UserDatasourceImpl implements UserDatasource {
     private readonly users: User[] = [
         { id: '1', name: 'User 1', email: 'user1@gmail.com', password: '123456', roles: [UserRole.USER] },
