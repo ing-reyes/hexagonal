@@ -10,7 +10,7 @@ export class CreateUserDto {
 
         if( !name ) return ['Missing name'] 
         if( !email ) return ['Missing email'] 
-        if( !password ) return ['Missing data'] 
+        if( !password ) return ['Missing password'] 
         
 
         return [undefined, new CreateUserDto(name, email, password)]
