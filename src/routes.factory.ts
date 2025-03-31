@@ -13,7 +13,8 @@ export class RoutesFactory {
 
     get routes(): Router {
         const routes = Router();
-
+        
+        //* Route: localhost:3000/api/users
         routes.use('/api/users', this.usersRoutes.routes);
 
         return routes;
