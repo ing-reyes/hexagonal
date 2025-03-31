@@ -36,6 +36,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "env-var": "^7.5.0",
