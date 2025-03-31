@@ -11,7 +11,7 @@ La arquitectura hexagonal promueve la flexibilidad, la mantenibilidad y la capac
 Es una arquitectura muy utilizada en el desarrollo de microservicios y en aplicaciones que requieren un alto grado de flexibilidad y capacidad de adaptación.
 
 
-![Architecture Hexagonal](https://miro.medium.com/v2/resize:fit:720/format:webp/1*yR4C1B-YfMh5zqpbHzTyag.png)
+![Architecture Hexagonal](https://framerusercontent.com/images/jH3E9Fmr6LqYE5HIAFzwaWnlOos.png)
 
 
 ```plaintext
