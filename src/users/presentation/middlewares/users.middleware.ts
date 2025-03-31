@@ -12,6 +12,7 @@ export class UsersMiddleware {
             return;
         }
 
+        //* Add the createUserDto to the request body for later use in the controller
         req.body.createUserDto = createUserDto;
 
         next()
@@ -25,6 +26,7 @@ export class UsersMiddleware {
             return;
         }
 
+        //* Add the updateUserDto to the request body for later use in the controller
         req.body.updateUserDto = updateUserDto;
 
         next()
