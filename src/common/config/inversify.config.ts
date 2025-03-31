@@ -11,13 +11,13 @@ import { FindAllUsersUseCase } from '../../users/application/use-cases/find-all-
 import { FindOneUserUseCase } from '../../users/application/use-cases/find-one-user.use-case';
 import { UpdateUserUseCase } from '../../users/application/use-cases/update-user.use-case';
 import { RemoveUserUseCase } from '../../users/application/use-cases/remove-user.use-case';
-import { UsersController } from '../../users/presentation/users.controller';
-import { UsersRoutes } from '../../users/presentation/users.routes';
+import { UsersController } from '../../users/infraestructure/presentation/users.controller';
+import { UsersRoutes } from '../../users/infraestructure/presentation/users.routes';
 import { RoutesFactory } from '../../routes.factory';
 import { envs } from './envs.config';
 import { Handler } from '../errors/handler.error';
 import { Server } from '../../server';
-import { UsersMiddleware } from '../../users/presentation/middlewares/users.middleware';
+import { UsersMiddleware } from '../../users/infraestructure/presentation/middlewares/users.middleware';
 
 const container = new Container();
 
