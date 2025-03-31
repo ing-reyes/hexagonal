@@ -288,7 +288,7 @@ Para añadir un nuevo caso de uso a un módulo existente:
 
 ## Diagrama de Flujo de Dependencias
 
-![Diagram Dependency injection](https://miro.medium.com/v2/resize:fit:720/format:webp/1*aDsxDnXogDwWCpccSiHbcg.png)
+![Diagram Dependency injection](https://github.com/ing-reyes/hexagonal/blob/main/public/images/hexagonal-flujo.png)
 
 ## Estructura de Inyección de Dependencias
 
@@ -312,6 +312,8 @@ Para añadir un nuevo caso de uso a un módulo existente:
 6. El **UserRepository** utiliza el **UserDatasource** para interactuar con la fuente de datos (base de datos, API externa, etc.).
 
 ## Esquema General
+
+![Diagram General](https://github.com/ing-reyes/hexagonal/blob/main/public/images/inyecciones-de-dependencias.png)
 
 ## Beneficios de este Enfoque
 
