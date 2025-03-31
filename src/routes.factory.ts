@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UsersRoutes } from './users/presentation/users.routes';
+import { UsersRoutes } from "./users/infraestructure/presentation/users.routes";
 import { inject, injectable } from "inversify";
 import { TYPES } from "./common/types/inversify.type";
 
