@@ -16,55 +16,58 @@ Es una arquitectura muy utilizada en el desarrollo de microservicios y en aplica
 
 ```plaintext
 src/
-├── common/                  # Código compartido entre módulos
-│   ├── config/              # Configuraciones globales
-│   │   └── envs.config.ts   # Configuración de variables de entorno
-│   ├── constants/           # Constantes globales
-│   │   └── cors.ts          # Configuración de CORS
-│   ├── enums/               # Enumeraciones compartidas
-│   │   └── http-status.enum.ts # Códigos de estado HTTP
-│   ├── errors/              # Manejo de errores centralizado
-│   │   ├── handler.error.ts # Manejador de errores
-│   │   └── manager.error.ts # Gestor de errores
-│   └── interfaces/          # Interfaces y tipos comunes
-│       ├── api-response.interface.ts # Estructura de respuestas de API
-│       ├── metadata.interface.ts   # Interfaz para metadatos de paginación
-│       └── status.interface.ts     # Interfaz para el estado de las respuestas
-├── users/                   # Módulo de usuarios
-│   ├── application/         # Capa de aplicación (casos de uso)
-│   │   ├── dtos/            # DTOs de entrada
-│   │   │   ├── create-user.dto.ts
-│   │   │   └── update-user.dto.ts
-│   │   ├── create-user.use-case.ts
-│   │   ├── find-all-users.use-case.ts
-│   │   └── find-one-user.use-case.ts
-│   │   ├── update-user.use-case.ts
-│   │   └── remove-user.use-case.ts
-│   └── domain/              # Capa de dominio
-│       ├── contracts/       # Contratos para transferencia de datos
-│       │   ├── create-user.contract.ts
-│       │   ├── update-user.contract.ts
-│       │   └── pagination.contract.ts
-│       ├── datasources/     # Interfaces para fuentes de datos
-│       │   └── user.datasource.ts
-│       ├── entities/        # Entidades de dominio
-│       │   └── user.entity.ts
-│       ├── enums/           # Enumeraciones del dominio
-│       │   └── user.role.ts
-│       └── repositories/    # Interfaces de repositorios
-│           └── user.repository.ts
-│   └── infrastructure/      # Capa de infraestructura
-│       ├── datasources/     # Implementaciones de fuentes de datos
-│       │   └── user.datasource.impl.ts
-│       ├── repositories/    # Implementaciones de repositorios
-│       │   └── user.repository.impl.ts
-│       └── presentation/    # Controladores y rutas
-│           ├── users.routes.ts
-│           └── users.controller.ts
-├── main.ts                  # Punto de entrada de la aplicación
-├── routes.ts                # Configuración de rutas principales
-└── server.ts                # Configuración del servidor Express
-````
+├── common/                  # Código compartido entre módulos
+│  ├── config/           # Configuraciones globales
+│  │  ├── envs.config.ts  # Configuración de variables de entorno
+│  │   └── inversify.config.ts #Configuracion de inversify container
+│  ├── constants/      # Constantes globales
+│  │  └── cors.ts      # Configuración de CORS
+│  ├── enums/           # Enumeraciones compartidas
+│  │  └── http-status.enum.ts # Códigos de estado HTTP
+│  ├── errors/         # Manejo de errores centralizado
+│  │  ├── handler.error.ts # Manejador de errores
+│  │  └── manager.error.ts # Gestor de errores
+│  ├── interfaces/        # Interfaces y tipos comunes
+│  │  ├── api-response.interface.ts # Estructura de respuestas de API
+│  │  ├── metadata.interface.ts  # Interfaz para metadatos de paginación
+│  │  └── status.interface.ts   # Interfaz para el estado de las respuestas
+│  └── types/ #Tipos custom
+│   └── inversify.type.ts #Tipos de inyeccion para inversify
+├── users/                # Módulo de usuarios
+│  ├── application/     # Capa de aplicación (casos de uso)
+│  │  ├── dtos/       # DTOs de entrada
+│  │  │  ├── create-user.dto.ts
+│  │  │  └── update-user.dto.ts
+│  │  ├── create-user.use-case.ts
+│  │  ├── find-all-users.use-case.ts
+│  │  └── find-one-user.use-case.ts
+│  │  ├── update-user.use-case.ts
+│  │  └── remove-user.use-case.ts
+│  └── domain/          # Capa de dominio
+│   ├── contracts/     # Contratos para transferencia de datos
+│   │  ├── create-user.contract.ts
+│   │  ├── update-user.contract.ts
+│   │  └── pagination.contract.ts
+│   ├── datasources/   # Interfaces para fuentes de datos
+│   │  └── user.datasource.ts
+│   ├── entities/     # Entidades de dominio
+│   │  └── user.entity.ts
+│   ├── enums/      # Enumeraciones del dominio
+│   │  └── user.role.ts
+│   └── repositories/   # Interfaces de repositorios
+│    └── user.repository.ts
+│  └── infrastructure/    # Capa de infraestructura
+│   ├── datasources/   # Implementaciones de fuentes de datos
+│   │  └── user.datasource.impl.ts
+│   ├── repositories/   # Implementaciones de repositorios
+│   │  └── user.repository.impl.ts
+│   └── presentation/   # Controladores y rutas
+│    ├── users.routes.ts
+│    └── users.controller.ts
+├── main.ts              # Punto de entrada de la aplicación
+├── routes.factory.ts    # Configuración de rutas principales
+└── server.ts             # Configuración del servidor Express
+```
 
 ## Principios SOLID
 
@@ -283,6 +286,40 @@ Para añadir un nuevo caso de uso a un módulo existente:
   - **⚠️ Manejo Centralizado de Errores**: A través de los componentes en `common/errors/`.
   - **✅ Validación de Datos**: A través de DTOs bien definidos en la capa de aplicación.
 
+## Diagrama de Flujo de Dependencias
+
+![Diagram Dependency injection](https://miro.medium.com/v2/resize:fit:720/format:webp/1*aDsxDnXogDwWCpccSiHbcg.png)
+
+## Estructura de Inyección de Dependencias
+
+| Componente | Dependencias Inyectadas
+|-----|-----
+| Server | RoutesFactory, Puerto de la aplicación
+| RoutesFactory | UsersRoutes
+| UsersRoutes | UsersMiddleware, UsersController
+| UsersController | Handler, CreateUserUseCase, FindAllUsersUseCase, FindOneUserUseCase, UpdateUserUseCase, RemoveUserUseCase
+| Casos de Uso | UserRepository
+| UserRepository | UserDatasource
+
+
+## Flujo de Datos (Inyecciones de Dependencias)
+
+1. El **Server** inicia la aplicación utilizando el **RoutesFactory** para configurar las rutas y el **Puerto** para escuchar conexiones.
+2. El **RoutesFactory** configura todas las rutas de la aplicación, incluyendo las **UsersRoutes**.
+3. Las **UsersRoutes** utilizan el **UsersMiddleware** para validación/autenticación y el **UsersController** para manejar las peticiones.
+4. El **UsersController** utiliza el **Handler** para manejar errores y los **Casos de Uso** para ejecutar la lógica de negocio.
+5. Los **Casos de Uso** utilizan el **UserRepository** para acceder a los datos.
+6. El **UserRepository** utiliza el **UserDatasource** para interactuar con la fuente de datos (base de datos, API externa, etc.).
+
+## Esquema General
+
+## Beneficios de este Enfoque
+
+- **Desacoplamiento**: Cada componente depende de abstracciones, no de implementaciones concretas.
+- **Testabilidad**: Facilita la creación de mocks para pruebas unitarias.
+- **Mantenibilidad**: Los cambios en una capa no afectan a las demás.
+- **Escalabilidad**: Nuevos módulos pueden seguir el mismo patrón.
+
 ## 🧪 Pruebas
 
 La arquitectura hexagonal facilita diferentes tipos de pruebas:
@@ -294,3 +331,4 @@ La arquitectura hexagonal facilita diferentes tipos de pruebas:
 ## 🏁 Conclusión
 
 Esta arquitectura hexagonal proporciona una base sólida para desarrollar aplicaciones escalables y mantenibles, con una clara separación de responsabilidades y un enfoque en la lógica de negocio. La estructura modular facilita la extensión y modificación del sistema, mientras que la independencia de frameworks externos garantiza la longevidad del código.
+
