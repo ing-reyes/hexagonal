@@ -1,0 +1,18 @@
+export const TYPES = {
+    UserDatasource: Symbol.for("UserDatasource"),
+    UserRepository: Symbol.for("UserRepository"),
+    CreateUserUseCase: Symbol.for("CreateUserUseCase"),
+    FindAllUsersUseCase: Symbol.for("FindAllUsersUseCase"),
+    FindOneUserUseCase: Symbol.for("FindOneUserUseCase"),
+    UpdateUserUseCase: Symbol.for("UpdateUserUseCase"),
+    RemoveUserUseCase: Symbol.for("RemoveUserUseCase"),
+    UsersController: Symbol.for("UsersController"),
+    UsersRoutes: Symbol.for("UsersRoutes"),
+    Handler: Symbol.for("Handler"),
+    CreateUserDto: Symbol.for("CreateUserDto"),
+    UpdateUserDto: Symbol.for("UpdateUserDto"),
+    PaginationDto: Symbol.for("PaginationDto"),
+    RoutesFactory: Symbol.for("RoutesFactory"),
+    Server: Symbol.for("Server"),
+    UsersMiddleware: Symbol.for("UsersMiddleware"),
+}
