@@ -27,18 +27,18 @@ export class Server {
     }
 
     start() {
-        // Cors
+        //* Enable Cors
         this.app.use(cors(CORS));
         
-        // Middleware
-        this.app.use(morgan('dev'));
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: true }));
+        //* Middlewares
+        this.app.use(morgan('dev')); // Log requests to the console
+        this.app.use(express.json()); // Parse JSON request body
+        this.app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request body
 
-        // Routes
-        this.app.use(this.routesFactory.routes);
+        //* Load routes factory
+        this.app.use(this.routesFactory.routes); // Load all routes
 
-        // Start server
+        //* Start server
         this.app.listen(this.port, () => {
             console.log(`Server running on port ${this.port}`);
         }
