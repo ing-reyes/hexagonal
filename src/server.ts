@@ -1,24 +1,28 @@
-import express, { Router } from 'express';
+import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 
 import { CORS } from './common/constants/cors';
+import { RoutesFactory } from './routes.factory';
+import { inject, injectable, unmanaged } from 'inversify';
+import { TYPES } from './common/types/inversify.type';
 
 interface Options {
     port: number;
-    routes: Router;
 }
 
+@injectable()
 export class Server {
     private readonly app: express.Application = express();
-    private readonly routes: Router;
     private readonly port: number;
 
     constructor(
+        @unmanaged()
         private readonly options: Options,
+        @inject(TYPES.RoutesFactory)
+        private readonly routesFactory: RoutesFactory,
     ) {
-        const { port, routes } = options;
-        this.routes = routes;
+        const { port } = options;
         this.port = port;
     }
 
@@ -32,7 +36,7 @@ export class Server {
         this.app.use(express.urlencoded({ extended: true }));
 
         // Routes
-        this.app.use(this.routes);
+        this.app.use(this.routesFactory.routes);
 
         // Start server
         this.app.listen(this.port, () => {
