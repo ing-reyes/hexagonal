@@ -32,7 +32,7 @@ export class UsersController {
 
     create = (req: Request, res: Response) => {
 
-        // Use Case
+        //* Use Case
          this.createUserUseCase.execute(req.body.createUserDto)
             .then(users => res.json(users))
             .catch(error => this.handlerError.error(error, res));
@@ -45,7 +45,7 @@ export class UsersController {
             return;
         }
 
-        // Use Case
+        //* Use Case
         this.findAllUsersUseCase.execute(paginationDto!)
             .then(users => res.json(users))
             .catch(error => this.handlerError.error(error, res));
@@ -53,7 +53,7 @@ export class UsersController {
 
     findOne = (req: Request, res: Response) => {
 
-        // Use Case
+        //* Use Case
         this.findOneUserUseCase.execute(req.params.id)
             .then(users => res.json(users))
             .catch(error => this.handlerError.error(error, res));
@@ -61,7 +61,7 @@ export class UsersController {
 
     update = (req: Request, res: Response) => {
     
-        // Use Case
+        //* Use Case
         this.updateUserUseCase.execute( req.params.id, req.body.updateUserDto)
             .then(users => res.json(users))
             .catch(error => this.handlerError.error(error, res));
@@ -69,7 +69,7 @@ export class UsersController {
 
     remove = (req: Request, res: Response) => {
 
-        // Use Case
+        //* Use Case
         this.removeUserUseCase.execute(req.params.id)
             .then(users => res.json(users))
             .catch(error => this.handlerError.error(error, res));
