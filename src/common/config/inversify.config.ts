@@ -21,12 +21,12 @@ import { UsersMiddleware } from '../../users/presentation/middlewares/users.midd
 
 const container = new Container();
 
-// Register all the datasources and repositories
+//* Register all the datasources and repositories
 container.bind<UserDatasource>(TYPES.UserDatasource).to(UserDatasourceImpl);
 container.bind<UserRepository>(TYPES.UserRepository).to(UserRepositoryImpl);
 
-// Register all the use cases
-// Users use cases
+//* Register all the use cases
+//* Users use cases
 container.bind<CreateUserUseCase>(TYPES.CreateUserUseCase).to(CreateUserUseCase);
 container.bind<FindAllUsersUseCase>(TYPES.FindAllUsersUseCase).to(FindAllUsersUseCase);
 container.bind<FindOneUserUseCase>(TYPES.FindOneUserUseCase).to(FindOneUserUseCase);
@@ -38,11 +38,11 @@ container.bind<UsersRoutes>(TYPES.UsersRoutes).to(UsersRoutes); // Asegúrate de
 container.bind<RoutesFactory>(TYPES.RoutesFactory).to(RoutesFactory);
 container.bind<Handler>(TYPES.Handler).to(Handler);
 
-// Middlewares
+//* Middlewares
 container.bind<UsersMiddleware>(TYPES.UsersMiddleware).to(UsersMiddleware);
 
 
-// Register the server
+//* Register the server
 container.bind<Server>(TYPES.Server).toDynamicValue(() => {
     return new Server({ port: envs.PORT }, container.get<RoutesFactory>(TYPES.RoutesFactory));
 });
