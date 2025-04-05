@@ -5,43 +5,56 @@ import { ManagerError } from "../../../common/errors/manager.error";
 import { PaginationContract } from "../../domain/contracts/pagination.contract";
 import { UpdateUserContract } from "../../domain/contracts/update-user.contract";
 import { User } from "../../domain/entities/user.entity";
-import { UserRole } from "../../domain/enums/user.role";
 import { UserDatasource } from "../../domain/datasources/user.datasource";
 import { injectable } from "inversify";
+import { UserModel } from "../../../data/mongodb/models/user.model";
+import { UserMapper } from "../mappers/user.mapper";
+import { Logger } from "../../../common/logging/logger";
 
 @injectable()
 export class UserDatasourceImpl implements UserDatasource {
-    private readonly users: User[] = [
-        { id: '1', name: 'User 1', email: 'user1@gmail.com', password: '123456', roles: [UserRole.USER] },
-        { id: '2', name: 'User 2', email: 'user2@gmail.com', password: '123456', roles: [UserRole.USER] },
-        { id: '3', name: 'User 3', email: 'user3@gmail.com', password: '123456', roles: [UserRole.USER] },
-        { id: '4', name: 'User 4', email: 'user4@gmail.com', password: '123456', roles: [UserRole.ADMIN] },
-        { id: '5', name: 'User 5', email: 'user5@gmail.com', password: '123456', roles: [UserRole.USER] },
-        { id: '6', name: 'User 6', email: 'user6@gmail.com', password: '123456', roles: [UserRole.USER] },
-    ];
+
+    private readonly logger = new Logger(UserDatasourceImpl.name);
 
     async create(createUserContract: CreateUserContract): Promise<ApiOneResponse<User>> {
         try {
-            const user = { ...createUserContract, id: (this.users.length + 1).toString(), roles: [UserRole.USER] };
-            this.users.push(user);
-            
+            const user = await UserModel.create(createUserContract);
+
+            if (!user) {
+                throw ManagerError.conflict('User not created!');
+            }
+
+            await user.save()
+
             return {
                 status: {
                     statusCode: HttpStatus.CREATED,
                     statusMsg: 'CREATED',
                     error: null,
                 },
-                data: user,
+                data: UserMapper.fromUserModelToEntity(user),
             }
         } catch (error) {
             if (error instanceof ManagerError) throw error;
 
+            this.logger.error(error);
             throw ManagerError.internalServerError();
         }
     }
 
     async findAll(paginationContract: PaginationContract): Promise<ApiAllResponse<User>> {
         const { page, limit } = paginationContract;
+        const skip = (page - 1) * limit;
+
+        const [users, total] = await Promise.all([
+            UserModel.find({})
+                .skip(skip)
+                .limit(limit),
+            UserModel.countDocuments(),
+        ]);
+
+        const lastPage = Math.ceil(total / limit);
+
         try {
             return {
                 status: {
@@ -50,47 +63,77 @@ export class UserDatasourceImpl implements UserDatasource {
                     error: null,
                 },
                 meta: {
-                    lastPage: 1,
+                    lastPage: lastPage,
                     page: page,
                     limit: limit,
-                    total: 6,
+                    total: total,
                 },
-                data: this.users,
+                data: users.map(UserMapper.fromUserModelToEntity),
             };
         } catch (error) {
             if (error instanceof ManagerError) throw error;
 
+            this.logger.error(error);
             throw ManagerError.internalServerError();
         }
     }
 
     async findOne(id: string): Promise<ApiOneResponse<User | null>> {
         try {
+
+            const user = await UserModel.findById(id);
+
             return {
                 status: {
                     statusCode: HttpStatus.OK,
                     statusMsg: 'OK',
                     error: null,
                 },
-                data: this.users.find(user => user.id === id) || null,
+                data: user ? UserMapper.fromUserModelToEntity(user) : null,
             };
         } catch (error) {
             if (error instanceof Error) throw error;
 
+            this.logger.error(error);
             throw ManagerError.internalServerError();
         }
     }
 
     async update(id: string, updateUserContract: UpdateUserContract): Promise<ApiOneResponse<User>> {
-        throw new Error("Method not implemented.");
+        try {
+
+            const existUser = await this.findOne(id);
+            if(!existUser.data){
+                throw ManagerError.notFound('User not found!');
+            }
+            
+            const user = await UserModel.findOneAndUpdate( { _id: id }, updateUserContract, { new: true });
+            
+
+            await user?.save();
+            
+            return {
+                status: {
+                    statusCode: HttpStatus.OK,
+                    statusMsg: 'OK',
+                    error: null,
+                },
+                data: UserMapper.fromUserModelToEntity(existUser.data),
+            };
+        } catch (error) {
+            if (error instanceof Error) throw error;
+
+            this.logger.error(error);
+            throw ManagerError.internalServerError();
+        }
     }
     async remove(id: string): Promise<ApiOneResponse<User>> {
         try {
-            
-            const user = this.users.find(user => user.id === id);
-            if (!user) throw ManagerError.notFound('User not found');
 
-            this.users.splice(this.users.indexOf(user), 1);
+            const user = await UserModel.findOneAndDelete({ _id: id });
+            if(!user){
+                throw ManagerError.notFound('User not found!');
+            }
 
             return {
                 status: {
@@ -98,11 +141,12 @@ export class UserDatasourceImpl implements UserDatasource {
                     statusMsg: 'OK',
                     error: null,
                 },
-                data: user,
+                data: UserMapper.fromUserModelToEntity(user),
             };
         } catch (error) {
             if (error instanceof Error) throw error;
 
+            this.logger.error(error);
             throw ManagerError.internalServerError();
         }
     }
