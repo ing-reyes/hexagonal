@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  hexagonal:
+    image: mongo:6.0.6
+    container_name: hexagonal
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: uhexagonal
+      MONGO_INITDB_ROOT_PASSWORD: secret123456
+    ports:
+      - 27017:27017
