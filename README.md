@@ -16,57 +16,70 @@ Es una arquitectura muy utilizada en el desarrollo de microservicios y en aplica
 
 ```plaintext
 src/
-├── common/                  # Código compartido entre módulos
-│  ├── config/           # Configuraciones globales
+├── common/    # Código compartido entre módulos
+│  ├── config/    # Configuraciones globales
 │  │  ├── envs.config.ts  # Configuración de variables de entorno
-│  │   └── inversify.config.ts #Configuracion de inversify container
-│  ├── constants/      # Constantes globales
-│  │  └── cors.ts      # Configuración de CORS
-│  ├── enums/           # Enumeraciones compartidas
+│  │  └── inversify.config.ts #Configuracion de inversify container
+│  ├── constants/    # Constantes globales
+│  │  └── cors.ts    # Configuración de CORS
+│  ├── enums/    # Enumeraciones compartidas
 │  │  └── http-status.enum.ts # Códigos de estado HTTP
-│  ├── errors/         # Manejo de errores centralizado
-│  │  ├── handler.error.ts # Manejador de errores
-│  │  └── manager.error.ts # Gestor de errores
-│  ├── interfaces/        # Interfaces y tipos comunes
-│  │  ├── api-response.interface.ts # Estructura de respuestas de API
-│  │  ├── metadata.interface.ts  # Interfaz para metadatos de paginación
-│  │  └── status.interface.ts   # Interfaz para el estado de las respuestas
-│  └── types/ #Tipos custom
-│   └── inversify.type.ts #Tipos de inyeccion para inversify
-├── users/                # Módulo de usuarios
-│  ├── application/     # Capa de aplicación (casos de uso)
-│  │  ├── dtos/       # DTOs de entrada
+│  ├── errors/    # Manejo de errores centralizado
+│  │  ├── handler.error.ts    # Manejador de errores
+│  │  └── manager.error.ts    # Gestor de errores
+│  ├── interfaces/    # Interfaces y tipos comunes
+│  │  ├── api-response.interface.ts    # Estructura de respuestas de API
+│  │  ├── metadata.interface.ts    # Interfaz para metadatos de paginación
+│  │  └── status.interface.ts    # Interfaz para el estado de las respuestas
+│  └── types/    #Tipos custom
+│  │  └── inversify.type.ts    #Tipos de inyeccion para inversify
+|  ├── middlewares    # Middlewares personalizados
+│  │  └── validate-id.middleware.ts    # Validador de id's
+|  ├── logging    # Logger personalizados
+│  │  ├── logger.ts   # Mostrar logger estructurado
+│  │  ├── save-logger.ts    # Guardar logs
+|  ├── adapters    # Configurar patron adaptador
+│  │  ├── validator.adapter.ts # Validadores globales
+├── data/    # Bases de Datos
+│  ├── mongodb/     # Configuraciones de MongoDB
+│  │  │  ├── models/    # Todos los modelos de MongoDB
+│  │  │  │  ├── user.model.ts/    # Modelo de usuario
+│  │  │  ├── mongo-db.ts    # Conexión de MongoDB
+├── users/    # Módulo de usuarios
+│  ├── application/    # Capa de aplicación (casos de uso)
+│  │  ├── dtos/    # DTOs de entrada
 │  │  │  ├── create-user.dto.ts
 │  │  │  └── update-user.dto.ts
-│  │  ├── create-user.use-case.ts
-│  │  ├── find-all-users.use-case.ts
-│  │  └── find-one-user.use-case.ts
-│  │  ├── update-user.use-case.ts
-│  │  └── remove-user.use-case.ts
-│  └── domain/          # Capa de dominio
-│   ├── contracts/     # Contratos para transferencia de datos
-│   │  ├── create-user.contract.ts
-│   │  ├── update-user.contract.ts
-│   │  └── pagination.contract.ts
-│   ├── datasources/   # Interfaces para fuentes de datos
-│   │  └── user.datasource.ts
-│   ├── entities/     # Entidades de dominio
-│   │  └── user.entity.ts
-│   ├── enums/      # Enumeraciones del dominio
-│   │  └── user.role.ts
-│   └── repositories/   # Interfaces de repositorios
-│    └── user.repository.ts
+│  │  ├── use-cases/    # Casos de usus de usuarios
+│  │     ├── create-user.use-case.ts
+│  │     ├── find-all-users.use-case.ts
+│  │     └── find-one-user.use-case.ts
+│  │     ├── update-user.use-case.ts
+│  │     └── remove-user.use-case.ts
+│  └── domain/    # Capa de dominio
+│  ├── contracts/    # Contratos para transferencia de datos
+│  │  ├── create-user.contract.ts
+│  │  ├── update-user.contract.ts
+│  │  └── pagination.contract.ts
+│  ├── datasources/    # Interfaces para fuentes de datos
+│  │  └── user.datasource.ts
+│  ├── entities/    # Entidades de dominio
+│  │  └── user.entity.ts
+│  ├── enums/    # Enumeraciones del dominio
+│  │  └── user.role.ts
+│  └── repositories/    # Interfaces de repositorios
+│  │  └── user.repository.ts
 │  └── infrastructure/    # Capa de infraestructura
-│   ├── datasources/   # Implementaciones de fuentes de datos
-│   │  └── user.datasource.impl.ts
-│   ├── repositories/   # Implementaciones de repositorios
-│   │  └── user.repository.impl.ts
-│   └── presentation/   # Controladores y rutas
-│    ├── users.routes.ts
-│    └── users.controller.ts
-├── main.ts              # Punto de entrada de la aplicación
+│  ├── datasources/    # Implementaciones de fuentes de datos
+│  │  └── user.datasource.impl.ts
+│  ├── repositories/    # Implementaciones de repositorios
+│  │  └── user.repository.impl.ts
+│  └── presentation/    # Controladores y rutas
+│     ├── users.routes.ts
+│     └── users.controller.ts
+├── main.ts    # Punto de entrada de la aplicación
 ├── routes.factory.ts    # Configuración de rutas principales
-└── server.ts             # Configuración del servidor Express
+└── server.ts    # Configuración del servidor Express
 ```
 
 ## Principios SOLID
