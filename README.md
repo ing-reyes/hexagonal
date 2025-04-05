@@ -240,6 +240,9 @@ Esta arquitectura se basa en los siguientes principios:
 # Instalar dependencias
 npm install
 
+# Levantar el contenedor de Docker
+docker compose up -d
+
 # Compilar TypeScript
 npm run build
 ```
