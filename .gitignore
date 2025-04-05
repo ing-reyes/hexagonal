@@ -9,3 +9,5 @@
 .env.production
 .env.test
 .env
+
+logs
