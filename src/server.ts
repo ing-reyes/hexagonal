@@ -29,6 +29,7 @@ export class Server {
     }
 
     start() {
+        logger.log(`Starting application...`, Server.name);
         //* Enable Cors
         this.app.use(cors(CORS));
 
@@ -45,6 +46,7 @@ export class Server {
             logger.log(`Application running on port ${this.port}`, Server.name);
             logger.log(`Application running in ${process.env.NODE_ENV?.trim()} mode`, Server.name);
             logger.log(`Application base URL: ${this.baseUrl()}`, Server.name);
+            logger.log(`Application started successfully`, Server.name);
         }
         );
     }
