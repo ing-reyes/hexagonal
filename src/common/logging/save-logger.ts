@@ -4,7 +4,7 @@ import path from "path"
 // Log levels with corresponding colors
 export enum LogLevel {
   DEBUG = "debug",
-  INFO = "info",
+  LOG = "log",
   WARN = "warn",
   ERROR = "error",
   VERBOSE = "verbose",
@@ -70,17 +70,17 @@ export class SaveLogger {
   }
 
   /**
-   * Log a message with INFO level
+   * Log a message with LOG level
    */
   log(message: any, sourceFile?: string): void {
-    this.writeLog(LogLevel.INFO, message, sourceFile)
+    this.writeLog(LogLevel.LOG, message, sourceFile)
   }
 
   /**
-   * Log a message with INFO level
+   * Log a message with LOG level
    */
-  info(message: any, sourceFile?: string): void {
-    this.writeLog(LogLevel.INFO, message, sourceFile)
+  LOG(message: any, sourceFile?: string): void {
+    this.writeLog(LogLevel.LOG, message, sourceFile)
   }
 
   /**
