@@ -8,7 +8,6 @@ import { RoutesFactory } from './routes.factory';
 import { inject, injectable, unmanaged } from 'inversify';
 import { TYPES } from './common/types/inversify.type';
 import { logger } from './common/logging/logger';
-import { saveLogger } from './common/logging/save-logger';
 
 interface Options {
     port: number;
@@ -48,9 +47,7 @@ export class Server {
             logger.log(`Application running in ${process.env.NODE_ENV?.trim()} mode`, Server.name);
             logger.log(`Application base URL: ${this.baseUrl()}`, Server.name);
             logger.log(`Application started successfully`, Server.name);
-            saveLogger.log('Application started successfully', 'server.ts');
-        }
-        );
+        });
     }
 
     private baseUrl(){
