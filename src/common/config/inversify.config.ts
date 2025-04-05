@@ -18,15 +18,18 @@ import { envs } from './envs.config';
 import { Handler } from '../errors/handler.error';
 import { Server } from '../../server';
 import { UsersMiddleware } from '../../users/infraestructure/presentation/middlewares/users.middleware';
+import { MongoDB } from '../../data/mongodb/mongo-db';
+import { ValidateIdMiddleware } from '../middlewares/validate-id.middleware';
+import { ValidatorsAdapter } from '../adapters/validators.adapter';
 
 const container = new Container();
 
-//* Register all the datasources and repositories
+//* ------------------START USERS-----------------------------------------------------
+// Datasources and Repositories
 container.bind<UserDatasource>(TYPES.UserDatasource).to(UserDatasourceImpl);
 container.bind<UserRepository>(TYPES.UserRepository).to(UserRepositoryImpl);
 
-//* Register all the use cases
-//* Users use cases
+// Users use cases
 container.bind<CreateUserUseCase>(TYPES.CreateUserUseCase).to(CreateUserUseCase);
 container.bind<FindAllUsersUseCase>(TYPES.FindAllUsersUseCase).to(FindAllUsersUseCase);
 container.bind<FindOneUserUseCase>(TYPES.FindOneUserUseCase).to(FindOneUserUseCase);
@@ -34,15 +37,32 @@ container.bind<UpdateUserUseCase>(TYPES.UpdateUserUseCase).to(UpdateUserUseCase)
 container.bind<RemoveUserUseCase>(TYPES.RemoveUserUseCase).to(RemoveUserUseCase);
 
 container.bind<UsersController>(TYPES.UsersController).to(UsersController);
-container.bind<UsersRoutes>(TYPES.UsersRoutes).to(UsersRoutes); // Asegúrate de registrar UsersRoutes
+container.bind<UsersRoutes>(TYPES.UsersRoutes).to(UsersRoutes);
 container.bind<RoutesFactory>(TYPES.RoutesFactory).to(RoutesFactory);
-container.bind<Handler>(TYPES.Handler).to(Handler);
 
-//* Middlewares
+// Middlewares
 container.bind<UsersMiddleware>(TYPES.UsersMiddleware).to(UsersMiddleware);
 
+//*------------------------END USERS---------------------------------------------------------
 
-//* Register the server
+//*------------------------START COMMON---------------------------------------------------------
+
+
+container.bind<ValidateIdMiddleware>(TYPES.ValidateIdMiddleware).to(ValidateIdMiddleware);
+container.bind<ValidatorsAdapter>(TYPES.ValidatorsAdapter).to(ValidatorsAdapter);
+container.bind<Handler>(TYPES.Handler).to(Handler);
+
+//*------------------------END COMMON---------------------------------------------------------
+
+//*------------------------START DATABASE---------------------------------------------------------
+
+// Databases
+// MongoDB
+container.bind<MongoDB>(TYPES.MongoDB).to(MongoDB);
+
+//*------------------------END DATABASE---------------------------------------------------------
+
+// Register the server
 container.bind<Server>(TYPES.Server).toDynamicValue(() => {
     return new Server({ port: envs.PORT }, container.get<RoutesFactory>(TYPES.RoutesFactory));
 });
