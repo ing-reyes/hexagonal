@@ -15,4 +15,7 @@ export const TYPES = {
     RoutesFactory: Symbol.for("RoutesFactory"),
     Server: Symbol.for("Server"),
     UsersMiddleware: Symbol.for("UsersMiddleware"),
+    MongoDB: Symbol.for("MongoDB"),
+    ValidateIdMiddleware: Symbol.for("ValidateIdMiddleware"),
+    ValidatorsAdapter: Symbol.for("ValidatorsAdapter"),
 }
