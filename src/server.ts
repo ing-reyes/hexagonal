@@ -7,7 +7,7 @@ import { CORS } from './common/constants/cors';
 import { RoutesFactory } from './routes.factory';
 import { inject, injectable, unmanaged } from 'inversify';
 import { TYPES } from './common/types/inversify.type';
-import { Logger } from './common/logging/logger';
+import { logger } from './common/logging/logger';
 
 interface Options {
     port: number;
@@ -17,7 +17,6 @@ interface Options {
 export class Server {
     private readonly app: express.Application = express();
     private readonly port: number;
-    private readonly logger = new Logger(Server.name)
 
     constructor(
         @unmanaged()
@@ -43,9 +42,9 @@ export class Server {
 
         //* Start server
         this.app.listen(this.port, () => {
-            this.logger.log(`Application running on port ${this.port}`);
-            this.logger.log(`Application running in ${process.env.NODE_ENV?.trim()} mode`);
-            this.logger.log(`Application base URL: ${this.baseUrl()}`);
+            logger.log(`Application running on port ${this.port}`, Server.name);
+            logger.log(`Application running in ${process.env.NODE_ENV?.trim()} mode`, Server.name);
+            logger.log(`Application base URL: ${this.baseUrl()}`, Server.name);
         }
         );
     }
