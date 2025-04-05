@@ -32,13 +32,15 @@ export class Logger {
   }
 
   private formatMessage(level: LogLevel, message: any): string {
+    const getColor = this.getColorByLogLevel(level)
+    const technology = getColor(`[${process.env.TECHNOLOGY}]`);
     const levelString = this.formatLogLevel(level)
     const timestamp = chalk.gray(this.getTimestamp())
-    const pidMessage = chalk.gray(`[${process.pid}]`)
+    const pidMessage = getColor(`[${process.pid}] -`)
     const contextMessage = this.context ? chalk.yellow(`[${this.context}]`) : ""
-    const formattedMessage = this.formatMessageContent(message)
+    const formattedMessage = getColor(this.formatMessageContent(message))
 
-    return `${timestamp} ${pidMessage} ${levelString} ${contextMessage} ${formattedMessage}`
+    return `${technology} ${pidMessage} ${timestamp} ${levelString} ${contextMessage} ${formattedMessage}`
   }
 
   private formatLogLevel(level: LogLevel): string {
