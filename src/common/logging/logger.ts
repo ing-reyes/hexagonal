@@ -49,20 +49,15 @@ export class Logger {
   }
 
   private getColorByLogLevel(level: LogLevel): ChalkColorFunction {
-    switch (level) {
-      case LogLevel.DEBUG:
-        return chalk.magentaBright
-      case LogLevel.VERBOSE:
-        return chalk.cyanBright
-      case LogLevel.LOG:
-        return chalk.green
-      case LogLevel.WARN:
-        return chalk.yellow
-      case LogLevel.ERROR:
-        return chalk.red
-      default:
-        return chalk.white
-    }
+    const colorMap: Record<LogLevel, ChalkColorFunction> = {
+      [LogLevel.DEBUG]: chalk.magentaBright,
+      [LogLevel.VERBOSE]: chalk.cyanBright,
+      [LogLevel.LOG]: chalk.green,
+      [LogLevel.WARN]: chalk.yellow,
+      [LogLevel.ERROR]: chalk.red,
+    };
+  
+    return colorMap[level] || chalk.white;
   }
 
   private formatMessageContent(message: any): string {
