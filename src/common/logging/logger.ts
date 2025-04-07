@@ -40,12 +40,12 @@ export class Logger {
     const contextMessage = this.context ? chalk.yellow(`[${this.context}]`) : ""
     const formattedMessage = color(this.formatMessageContent(message))
 
-    return `${technology} ${pidMessage} ${timestamp} ${levelString} ${contextMessage} ${formattedMessage}`
+    return `${technology} ${pidMessage} ${timestamp}  ${levelString} ${contextMessage} ${formattedMessage}`
   }
 
   private formatLogLevel(level: LogLevel): string {
     const color = this.getColorByLogLevel(level)
-    return color(`[${level.toUpperCase()}]`)
+    return color(`${level.toUpperCase()}`)
   }
 
   private getColorByLogLevel(level: LogLevel): ChalkColorFunction {
