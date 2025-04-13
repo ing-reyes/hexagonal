@@ -22,6 +22,7 @@ import { MongoDB } from '../../data/mongodb/mongo-db';
 import { ValidateIdMiddleware } from '../middlewares/validate-id.middleware';
 import { ValidatorsAdapter } from '../adapters/validators.adapter';
 import { UsersCacheMiddleware } from '../../users/infraestructure/presentation/middlewares/users-cache.middleware';
+import { BcryptAdapter } from '../adapters/bcrypt.adapter';
 
 const container = new Container();
 
@@ -64,6 +65,10 @@ container.bind<Handler>(TYPES.Handler).to(Handler);
 container.bind<MongoDB>(TYPES.MongoDB).to(MongoDB);
 
 //*------------------------END DATABASE---------------------------------------------------------
+
+//*------------------------START CONFIG---------------------------------------------------------
+container.bind<BcryptAdapter>(TYPES.BcryptAdapter).to(BcryptAdapter);
+//*------------------------END CONFIG-----------------------------------------------------------
 
 // Register the server
 container.bind<Server>(TYPES.Server).toDynamicValue(() => {

@@ -19,5 +19,5 @@ export const TYPES = {
     ValidateIdMiddleware: Symbol.for("ValidateIdMiddleware"),
     ValidatorsAdapter: Symbol.for("ValidatorsAdapter"),
     UsersCacheMiddleware: Symbol.for("UsersCacheMiddleware"),
-    
+    BcryptAdapter: Symbol.for("BcryptAdapter"),
 }
