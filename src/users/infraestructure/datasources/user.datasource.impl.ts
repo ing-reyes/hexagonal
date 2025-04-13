@@ -1,22 +1,30 @@
+import { inject, injectable } from "inversify";
+
 import { ApiAllResponse, ApiOneResponse } from "../../../common/interfaces/api-response.interface";
+import { BcryptAdapter } from "../../../common/adapters/bcrypt.adapter";
 import { CreateUserContract } from "../../domain/contracts/create-user.contract";
 import { HttpStatus } from "../../../common/enums/http-status.enum";
+import { KeysCache } from "../enums/keys-cache.enum";
+import { Logger } from "../../../common/logging/logger";
 import { ManagerError } from "../../../common/errors/manager.error";
 import { PaginationContract } from "../../domain/contracts/pagination.contract";
+import { redisClient } from "../../../data/redis/client-redis";
+import { TYPES } from "../../../common/types/inversify.type";
 import { UpdateUserContract } from "../../domain/contracts/update-user.contract";
 import { User } from "../../domain/entities/user.entity";
 import { UserDatasource } from "../../domain/datasources/user.datasource";
-import { injectable } from "inversify";
-import { UserModel } from "../../../data/mongodb/models/user.model";
 import { UserMapper } from "../mappers/user.mapper";
-import { Logger } from "../../../common/logging/logger";
-import { redisClient } from "../../../data/redis/client-redis";
-import { KeysCache } from "../enums/keys-cache.enum";
+import { UserModel } from "../../../data/mongodb/models/user.model";
 
 @injectable()
 export class UserDatasourceImpl implements UserDatasource {
 
     private readonly logger = new Logger(UserDatasourceImpl.name);
+
+    constructor(
+        @inject(TYPES.BcryptAdapter)
+        private readonly bcryptAdapter: BcryptAdapter,
+    ){}
 
     private async saveToCache<T>(key: string, data: T, ttl: number): Promise<T> {
         try {
@@ -29,7 +37,10 @@ export class UserDatasourceImpl implements UserDatasource {
 
     async create(createUserContract: CreateUserContract): Promise<ApiOneResponse<User>> {
         try {
-            const user = await UserModel.create(createUserContract);
+            const user = await UserModel.create({
+                ...createUserContract,
+                password: this.bcryptAdapter.hash(createUserContract.password),
+            });
 
             if (!user) {
                 throw ManagerError.conflict('User not created!');
