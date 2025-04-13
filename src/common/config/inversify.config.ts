@@ -21,6 +21,7 @@ import { UsersMiddleware } from '../../users/infraestructure/presentation/middle
 import { MongoDB } from '../../data/mongodb/mongo-db';
 import { ValidateIdMiddleware } from '../middlewares/validate-id.middleware';
 import { ValidatorsAdapter } from '../adapters/validators.adapter';
+import { UsersCacheMiddleware } from '../../users/infraestructure/presentation/middlewares/users-cache.middleware';
 
 const container = new Container();
 
@@ -42,6 +43,8 @@ container.bind<RoutesFactory>(TYPES.RoutesFactory).to(RoutesFactory);
 
 // Middlewares
 container.bind<UsersMiddleware>(TYPES.UsersMiddleware).to(UsersMiddleware);
+container.bind<UsersCacheMiddleware>(TYPES.UsersCacheMiddleware).to(UsersCacheMiddleware);
+
 
 //*------------------------END USERS---------------------------------------------------------
 

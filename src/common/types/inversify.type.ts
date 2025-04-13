@@ -18,4 +18,6 @@ export const TYPES = {
     MongoDB: Symbol.for("MongoDB"),
     ValidateIdMiddleware: Symbol.for("ValidateIdMiddleware"),
     ValidatorsAdapter: Symbol.for("ValidatorsAdapter"),
+    UsersCacheMiddleware: Symbol.for("UsersCacheMiddleware"),
+    
 }
