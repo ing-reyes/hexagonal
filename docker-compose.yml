@@ -11,6 +11,20 @@ services:
     volumes:
       - mongodb_data:/data/db
 
+  cache:
+    image: redis:bookworm
+    container_name: cache_redis
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    environment:
+      REDIS_PASSWORD: secret123456
+    command: redis-server --requirepass secret123456
+
 volumes:
   mongodb_data:
     name: mongodb_hexagonal_data
+  redis_data:
+    name: cache_redis_data
