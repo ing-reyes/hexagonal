@@ -10,11 +10,22 @@ import { injectable } from "inversify";
 import { UserModel } from "../../../data/mongodb/models/user.model";
 import { UserMapper } from "../mappers/user.mapper";
 import { Logger } from "../../../common/logging/logger";
+import { redisClient } from "../../../data/redis/client-redis";
+import { KeysCache } from "../enums/keys-cache.enum";
 
 @injectable()
 export class UserDatasourceImpl implements UserDatasource {
 
     private readonly logger = new Logger(UserDatasourceImpl.name);
+
+    private async saveToCache<T>(key: string, data: T, ttl: number): Promise<T> {
+        try {
+            await redisClient.set(key, JSON.stringify(data), { EX: ttl, NX: true });
+        } catch (error) {
+            this.logger.error(`Failed to cache data for key: ${key}`);
+        }
+        return data;
+    }
 
     async create(createUserContract: CreateUserContract): Promise<ApiOneResponse<User>> {
         try {
@@ -25,6 +36,9 @@ export class UserDatasourceImpl implements UserDatasource {
             }
 
             await user.save()
+
+            // Invalidate related caches
+            await redisClient.del(KeysCache.ALL_USERS);
 
             return {
                 status: {
@@ -46,17 +60,17 @@ export class UserDatasourceImpl implements UserDatasource {
         const { page, limit } = paginationContract;
         const skip = (page - 1) * limit;
 
-        const [users, total] = await Promise.all([
-            UserModel.find({})
-                .skip(skip)
-                .limit(limit),
-            UserModel.countDocuments(),
-        ]);
-
-        const lastPage = Math.ceil(total / limit);
-
         try {
-            return {
+            const [users, total] = await Promise.all([
+                UserModel.find({})
+                    .skip(skip)
+                    .limit(limit),
+                UserModel.countDocuments(),
+            ]);
+
+            const lastPage = Math.ceil(total / limit);
+
+            const response: ApiAllResponse<User> = {
                 status: {
                     statusCode: HttpStatus.OK,
                     statusMsg: 'OK',
@@ -70,6 +84,10 @@ export class UserDatasourceImpl implements UserDatasource {
                 },
                 data: users.map(UserMapper.fromUserModelToEntity),
             };
+
+            await this.saveToCache(KeysCache.ALL_USERS, response, 60 * 30); // Cache for 30 minutes
+
+            return response;
         } catch (error) {
             if (error instanceof ManagerError) throw error;
 
@@ -82,15 +100,22 @@ export class UserDatasourceImpl implements UserDatasource {
         try {
 
             const user = await UserModel.findById(id);
+            const userMapper = user ? UserMapper.fromUserModelToEntity(user) : null;
 
-            return {
+            const response: ApiOneResponse<User | null> = {
                 status: {
                     statusCode: HttpStatus.OK,
                     statusMsg: 'OK',
                     error: null,
                 },
-                data: user ? UserMapper.fromUserModelToEntity(user) : null,
+                data: user ? userMapper : null,
             };
+
+            if (user) {
+                await this.saveToCache(`${KeysCache.USER_BY_ID}${userMapper?.id}`, response, 60 * 30); // Cache for 30 minutes
+            }
+
+            return response;
         } catch (error) {
             if (error instanceof Error) throw error;
 
@@ -103,15 +128,19 @@ export class UserDatasourceImpl implements UserDatasource {
         try {
 
             const existUser = await this.findOne(id);
-            if(!existUser.data){
+            if (!existUser.data) {
                 throw ManagerError.notFound('User not found!');
             }
-            
-            const user = await UserModel.findOneAndUpdate( { _id: id }, updateUserContract, { new: true });
-            
+
+            const user = await UserModel.findOneAndUpdate({ _id: id }, updateUserContract, { new: true });
+
 
             await user?.save();
-            
+
+            // Invalidate related caches
+            await redisClient.del(KeysCache.ALL_USERS);
+            await redisClient.del(`${KeysCache.USER_BY_ID}${user?.id}`);
+
             return {
                 status: {
                     statusCode: HttpStatus.OK,
@@ -131,9 +160,13 @@ export class UserDatasourceImpl implements UserDatasource {
         try {
 
             const user = await UserModel.findOneAndDelete({ _id: id });
-            if(!user){
+            if (!user) {
                 throw ManagerError.notFound('User not found!');
             }
+
+            // Invalidate related caches
+            await redisClient.del(KeysCache.ALL_USERS);
+            await redisClient.del(`${KeysCache.USER_BY_ID}${user.id}`);
 
             return {
                 status: {
