@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "set NODE_ENV=development && tsnd --respawn --clear src/main.ts",
     "build": "set NODE_ENV=production && rimraf ./dist && tsc",
-    "start": "set NODE_ENV=production && npm run build && pm2 start dist/main.js --name hexagonal"
+    "start": "set NODE_ENV=production && npm run build && node dist/main.js"
   },
   "keywords": [
     "hexagonal",
