@@ -37,6 +37,13 @@ export class UserDatasourceImpl implements UserDatasource {
 
     async create(createUserContract: CreateUserContract): Promise<ApiOneResponse<User>> {
         try {
+
+            // Check if user already exists
+            const existingUser = await this.findOneByEmail(createUserContract.email);
+            if (existingUser.data) {
+                throw ManagerError.conflict('User already exists!');
+            }
+
             const user = await UserModel.create({
                 ...createUserContract,
                 password: this.bcryptAdapter.hash(createUserContract.password),
@@ -111,6 +118,34 @@ export class UserDatasourceImpl implements UserDatasource {
         try {
 
             const user = await UserModel.findById(id);
+            const userMapper = user ? UserMapper.fromUserModelToEntity(user) : null;
+
+            const response: ApiOneResponse<User | null> = {
+                status: {
+                    statusCode: HttpStatus.OK,
+                    statusMsg: 'OK',
+                    error: null,
+                },
+                data: user ? userMapper : null,
+            };
+
+            if (user) {
+                await this.saveToCache(`${KeysCache.USER_BY_ID}${userMapper?.id}`, response, 60 * 30); // Cache for 30 minutes
+            }
+
+            return response;
+        } catch (error) {
+            if (error instanceof Error) throw error;
+
+            this.logger.error(error);
+            throw ManagerError.internalServerError();
+        }
+    }
+
+    async findOneByEmail(email: string): Promise<ApiOneResponse<User | null>> {
+        try {
+
+            const user = await UserModel.findOne({email});
             const userMapper = user ? UserMapper.fromUserModelToEntity(user) : null;
 
             const response: ApiOneResponse<User | null> = {
