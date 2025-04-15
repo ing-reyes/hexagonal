@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "set NODE_ENV=development && tsnd --respawn --clear src/main.ts",
     "build": "set NODE_ENV=production && rimraf ./dist && tsc",
-    "start": "set NODE_ENV=production && npm run build && node dist/main.js"
+    "start": "set NODE_ENV=production && npm run build && pm2 start dist/main.js --name hexagonal"
   },
   "keywords": [
     "hexagonal",
@@ -29,6 +29,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.13.11",
     "rimraf": "^6.0.1",
@@ -44,6 +45,7 @@
     "express": "^4.21.2",
     "inversify": "^7.3.0",
     "inversify-binding-decorators": "^4.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.1",
     "morgan": "^1.10.0",
     "redis": "^4.7.0",
