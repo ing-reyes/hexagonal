@@ -6,6 +6,8 @@ import { UsersMiddleware } from "./middlewares/users.middleware";
 import { ValidateIdMiddleware } from "../../../common/middlewares/validate-id.middleware";
 import { logger } from "../../../common/logging/logger";
 import { UsersCacheMiddleware } from "./middlewares/users-cache.middleware";
+import { AuthMiddleware } from '../../../auth/infraestructure/presentation/middlewares/auth.middleware';
+import { UserRole } from "../../domain/enums/user.role";
 
 
 @injectable()
@@ -20,6 +22,8 @@ export class UsersRoutes {
         private readonly validateIdMiddleware: ValidateIdMiddleware,
         @inject(TYPES.UsersCacheMiddleware)
         private readonly usersCacheMiddleware: UsersCacheMiddleware,
+        @inject(TYPES.AuthMiddleware)
+        private readonly authMiddleware: AuthMiddleware,
     ) { }
 
     get routes(): Router {
@@ -62,6 +66,9 @@ export class UsersRoutes {
         logger.log('DELETE /api/users/:id', UsersRoutes.name)
         routes.delete('/:id', [
             this.validateIdMiddleware.isMongoId,
+            this.authMiddleware.validateJWT,
+            this.authMiddleware.validateRoles([UserRole.ADMIN]),
+
         ],
             this.usersController.remove);
 
