@@ -1,4 +1,5 @@
 export const TYPES = {
+    //* Users
     UserDatasource: Symbol.for("UserDatasource"),
     UserRepository: Symbol.for("UserRepository"),
     CreateUserUseCase: Symbol.for("CreateUserUseCase"),
@@ -20,4 +21,18 @@ export const TYPES = {
     ValidatorsAdapter: Symbol.for("ValidatorsAdapter"),
     UsersCacheMiddleware: Symbol.for("UsersCacheMiddleware"),
     BcryptAdapter: Symbol.for("BcryptAdapter"),
+    
+    //* Auth
+    SignInUseCase: Symbol.for("SignInUseCase"),
+    SignUpUseCase: Symbol.for("SignUpUseCase"),
+    RefresshTokenUseCase: Symbol.for("RefresshTokenUseCase"),
+    AuthDatasource: Symbol.for("AuthDatasource"),
+    AuthDatasourceImpl: Symbol.for("AuthDatasourceImpl"),
+    AuthRepository: Symbol.for("AuthRepository"),
+    AuthRepositoryImpl: Symbol.for("AuthRepositoryImpl"),
+    AuthController: Symbol.for("AuthController"),
+    AuthRoutes: Symbol.for("AuthRoutes"),
+    AuthMiddleware: Symbol.for("AuthMiddleware"),
+    JWTAdapter: Symbol.for("JWTAdapter"),
+    ValidateAuthMiddleware: Symbol.for("ValidateAuthMiddleware"),
 }
