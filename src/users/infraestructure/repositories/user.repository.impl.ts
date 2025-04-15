@@ -25,6 +25,9 @@ export class UserRepositoryImpl implements UserRepository {
     findOne(id: string): Promise<ApiOneResponse<User | null>> {
         return this.userDatasource.findOne(id);
     }
+    findOneByEmail(email: string): Promise<ApiOneResponse<User | null>> {
+        return this.userDatasource.findOneByEmail(email);
+    }
     update(id: string, updateUserContract: UpdateUserContract): Promise<ApiOneResponse<User>> {
         return this.userDatasource.update(id, updateUserContract)
     }
