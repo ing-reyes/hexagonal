@@ -23,6 +23,18 @@ import { ValidateIdMiddleware } from '../middlewares/validate-id.middleware';
 import { ValidatorsAdapter } from '../adapters/validators.adapter';
 import { UsersCacheMiddleware } from '../../users/infraestructure/presentation/middlewares/users-cache.middleware';
 import { BcryptAdapter } from '../adapters/bcrypt.adapter';
+import { SignInUseCase } from '../../auth/application/use-cases/sign-in.use-case';
+import { SignUpUseCase } from '../../auth/application/use-cases/sign-up.use-case';
+import { RefresshTokenUseCase } from '../../auth/application/use-cases/refress-token.use-case';
+import { AuthDatasource } from '../../auth/domain/datasources/auth.datasource';
+import { AuthDatasourceImpl } from '../../auth/infraestructure/datasources/auth.datasource.impl';
+import { AuthRepositoryImpl } from '../../auth/infraestructure/repositories/auth.repository.impl';
+import { AuthRepository } from '../../auth/domain/repositories/auth.repository';
+import { AuthController } from '../../auth/infraestructure/presentation/auth.controller';
+import { AuthMiddleware } from '../../auth/infraestructure/presentation/middlewares/auth.middleware';
+import { AuthRoutes } from '../../auth/infraestructure/presentation/auth.routes';
+import { JWTAdapter } from '../adapters/jwt.adapter';
+import { ValidateAuthMiddleware } from '../../auth/infraestructure/presentation/middlewares/validate-auth.middleware';
 
 const container = new Container();
 
@@ -48,6 +60,24 @@ container.bind<UsersCacheMiddleware>(TYPES.UsersCacheMiddleware).to(UsersCacheMi
 
 
 //*------------------------END USERS---------------------------------------------------------
+
+//*------------------------START AUTH---------------------------------------------------------
+// Auth Datasources and Repositories
+container.bind<AuthDatasource>(TYPES.AuthDatasource).to(AuthDatasourceImpl);
+container.bind<AuthRepository>(TYPES.AuthRepository).to(AuthRepositoryImpl);
+container.bind<AuthController>(TYPES.AuthController).to(AuthController);
+container.bind<AuthMiddleware>(TYPES.AuthMiddleware).to(AuthMiddleware);
+container.bind<ValidateAuthMiddleware>(TYPES.ValidateAuthMiddleware).to(ValidateAuthMiddleware);
+container.bind<AuthRoutes>(TYPES.AuthRoutes).to(AuthRoutes);
+
+
+// Auth use cases
+container.bind<SignInUseCase>(TYPES.SignInUseCase).to(SignInUseCase);
+container.bind<SignUpUseCase>(TYPES.SignUpUseCase).to(SignUpUseCase);
+container.bind<RefresshTokenUseCase>(TYPES.RefresshTokenUseCase).to(RefresshTokenUseCase);
+
+container.bind<JWTAdapter>(TYPES.JWTAdapter).to(JWTAdapter);
+
 
 //*------------------------START COMMON---------------------------------------------------------
 
