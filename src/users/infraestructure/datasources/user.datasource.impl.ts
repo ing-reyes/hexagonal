@@ -29,10 +29,11 @@ export class UserDatasourceImpl implements UserDatasource {
     private async saveToCache<T>(key: string, data: T, ttl: number): Promise<T> {
         try {
             await redisClient.set(key, JSON.stringify(data), { EX: ttl, NX: true });
+            return data;
         } catch (error) {
             this.logger.error(`Failed to cache data for key: ${key}`);
+            throw error;
         }
-        return data;
     }
 
     async create(createUserContract: CreateUserContract): Promise<ApiOneResponse<User>> {
