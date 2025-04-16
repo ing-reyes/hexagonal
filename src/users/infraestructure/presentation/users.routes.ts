@@ -32,7 +32,7 @@ export class UsersRoutes {
         //* Create user
         logger.log('POST /api/users', UsersRoutes.name)
         routes.post('/',
-            [this.usersMiddleware.validateCreateUse],
+            [this.usersMiddleware.validateCreateUser],
             this.usersController.create
         );
 
@@ -57,7 +57,7 @@ export class UsersRoutes {
         logger.log('PATCH /api/users/:id', UsersRoutes.name)
         routes.patch('/:id', [
             this.validateIdMiddleware.isMongoId,
-            this.usersMiddleware.validateUpdateUse
+            this.usersMiddleware.validateUpdateUser
         ],
             this.usersController.update,
         );

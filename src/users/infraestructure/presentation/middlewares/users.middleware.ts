@@ -5,10 +5,10 @@ import { injectable } from "inversify";
 
 @injectable()
 export class UsersMiddleware {
-    validateCreateUse = (req: Request, res: Response, next: NextFunction) => {
+    validateCreateUser = (req: Request, res: Response, next: NextFunction) => {
         const [error, createUserDto] = CreateUserDto.create(req.body);
         if (error) {
-            res.status(400).json({ statusCode: 400, message: error, statusMsg: 'BAD_REQUEST' });
+            res.status(400).json({ statusCode: 400, statusMsg: 'BAD_REQUEST', error: error });
             return;
         }
 
@@ -19,10 +19,10 @@ export class UsersMiddleware {
 
     }
 
-    validateUpdateUse = (req: Request, res: Response, next: NextFunction) => {
+    validateUpdateUser = (req: Request, res: Response, next: NextFunction) => {
         const [error, updateUserDto] = UpdateUserDto.update(req.body);
         if (error) {
-            res.status(400).json({ statusCode: 400, message: error, statusMsg: 'BAD_REQUEST' });
+            res.status(400).json({ statusCode: 400, statusMsg: 'BAD_REQUEST', error: error });
             return;
         }
 
