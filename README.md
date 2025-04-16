@@ -259,6 +259,7 @@ El proyecto utiliza archivos `.env` para la configuración:
 
   - `.env.development`: Configuración para entorno de desarrollo
   - `.env.production`: Configuración para entorno de producción
+  - `.env`: Configuración para entorno de producción con Docker
   - `.env.template`: Plantilla con las variables necesarias
 
 ### ▶️ Ejecución
