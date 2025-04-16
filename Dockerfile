@@ -1,17 +1,23 @@
-FROM node:22-alpine
-
-RUN npm install -g ts-node pm2
+# Etapa de construcción
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
+RUN npm install
 
 COPY . .
 
-RUN npm install
+# Etapa de producción
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+COPY package*.json ./
+RUN npm install --omit=dev --production
 
 ENV NODE_ENV=production
-
 EXPOSE 8000
 
-CMD ["npm", "start"]
+CMD ["node", "dist/main.js"]
