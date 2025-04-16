@@ -1,13 +1,16 @@
-import { injectable } from "inversify";
 import mongoose from "mongoose";
 
-@injectable()
 export class ValidatorsAdapter {
-    isMongoId(id: string): boolean {
+    static isMongoId(id: string): boolean {
         return mongoose.Types.ObjectId.isValid(id);
     }
 
-    isNumberId(id: string): boolean {
+    static isNumberId(id: string): boolean {
         return !isNaN(+id);
+    }
+
+    static isEmail(email: string): boolean {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email);
     }
 }
