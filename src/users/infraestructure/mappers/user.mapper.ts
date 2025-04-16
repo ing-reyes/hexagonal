@@ -12,6 +12,6 @@ export class UserMapper {
         if( !password ) throw ManagerError.badRequest('Missing password');
         if( !roles ) throw ManagerError.badRequest('Missing roles');
 
-        return new User(id || _id, name, email, password, roles);
+        return new User(id ?? _id, name, email, password, roles);
     }
 }
