@@ -1,18 +1,14 @@
 import { NextFunction, Request, Response } from "express";
+import { injectable } from "inversify";
 import { ValidatorsAdapter } from "../adapters/validators.adapter";
-import { inject, injectable } from "inversify";
-import { TYPES } from "../types/inversify.type";
+import { HttpStatus } from "../enums/http-status.enum";
 
 @injectable()
 export class ValidateIdMiddleware {
-    constructor(
-        @inject(TYPES.ValidatorsAdapter)
-        private readonly validatorsAdapter: ValidatorsAdapter,
-    ){}
 
     isMongoId = ( req: Request, res: Response, next: NextFunction )=>{
-        if( !this.validatorsAdapter.isMongoId(req.params.id) ){
-            res.status(400).json({statusCode: 400, message: 'Mongo id invalid', statusMsg: 'BAD_REQUEST'})
+        if( !ValidatorsAdapter.isMongoId(req.params.id) ){
+            res.status(400).json({statusCode: HttpStatus.BAD_REQUEST, statusMsg: 'BAD_REQUEST', error: 'Mongo id invalid'})
             return;
         }
 
@@ -20,7 +16,7 @@ export class ValidateIdMiddleware {
     }
 
     isNumberId = ( req: Request, res: Response, next: NextFunction )=>{
-        if( !this.validatorsAdapter.isNumberId(req.params.id) ){
+        if( !ValidatorsAdapter.isNumberId(req.params.id) ){
             res.status(400).json({statusCode: 400, message: 'Id must be a number', statusMsg: 'BAD_REQUEST'})
             return;
         }
