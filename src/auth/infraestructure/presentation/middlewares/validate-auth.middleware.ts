@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { SignInDto } from "../../../application/dtos/sign-in.dto";
 import { SignUpDto } from "../../../application/dtos/sign-up.dto";
 import { injectable } from "inversify";
+import { HttpStatus } from "../../../../common/enums/http-status.enum";
 
 @injectable()
 export class ValidateAuthMiddleware {
@@ -11,7 +12,7 @@ export class ValidateAuthMiddleware {
         const [error, signIn] = SignInDto.signIn(req.body)
 
         if (error) {
-            res.status(400).json({ message: error });
+            res.status(400).json({ statusCode: HttpStatus.BAD_REQUEST, statusMsg: 'BAD_REQUEST', error: error });
             return;
         }
 
@@ -24,7 +25,7 @@ export class ValidateAuthMiddleware {
         const [error, signUp] = SignUpDto.signUp(req.body)
 
         if (error) {
-            res.status(400).json({ message: error });
+            res.status(400).json({ statusCode: HttpStatus.BAD_REQUEST, statusMsg: 'BAD_REQUEST', error: error });
             return;
         }
 
