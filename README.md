@@ -243,6 +243,12 @@ npm install
 # Levantar el contenedor de Docker
 docker compose up -d
 
+# Crear la imagen de Docker
+docker build --no-cache --progress=plain -t api-hexagonal:v1.0 .
+
+# Levantar la Imagen
+docker run --name hexagonal-app -it -p 8000:8000 api-hexagonal:v1.0
+
 # Compilar TypeScript
 npm run build
 ```
