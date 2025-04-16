@@ -1,3 +1,14 @@
 node_modules
-dist
-logs
+npm-debug.log
+.git
+.gitignore
+.env
+.env.*
+*.md
+.vscode
+coverage
+.nyc_output
+src
+public
+test
+ecosystem.config.js
