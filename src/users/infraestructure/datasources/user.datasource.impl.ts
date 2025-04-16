@@ -136,7 +136,7 @@ export class UserDatasourceImpl implements UserDatasource {
 
             return response;
         } catch (error) {
-            if (error instanceof Error) throw error;
+            if (error instanceof ManagerError) throw error;
 
             this.logger.error(error);
             throw ManagerError.internalServerError();
@@ -164,7 +164,7 @@ export class UserDatasourceImpl implements UserDatasource {
 
             return response;
         } catch (error) {
-            if (error instanceof Error) throw error;
+            if (error instanceof ManagerError) throw error;
 
             this.logger.error(error);
             throw ManagerError.internalServerError();
@@ -197,7 +197,7 @@ export class UserDatasourceImpl implements UserDatasource {
                 data: UserMapper.fromUserModelToEntity(existUser.data),
             };
         } catch (error) {
-            if (error instanceof Error) throw error;
+            if (error instanceof ManagerError) throw error;
 
             this.logger.error(error);
             throw ManagerError.internalServerError();
@@ -224,7 +224,7 @@ export class UserDatasourceImpl implements UserDatasource {
                 data: UserMapper.fromUserModelToEntity(user),
             };
         } catch (error) {
-            if (error instanceof Error) throw error;
+            if (error instanceof ManagerError) throw error;
 
             this.logger.error(error);
             throw ManagerError.internalServerError();
