@@ -1,11 +1,42 @@
 services:
-  hexagonal:
+  app:
+    build: .
+    container_name: my_app
+    restart: always
+    ports:
+      - 8000:8000
+    environment:
+      # Server
+      - PORT=${PORT}
+      - NODE_ENV=${NODE_ENV}
+      - HOSTNAME=${HOSTNAME}
+      # MongoDB
+      - MONGO_DB_NAME=${MONGO_DB_NAME}
+      - MONGO_DB_USER=${MONGO_DB_USER}
+      - MONGO_DB_PASSWORD=${MONGO_DB_PASSWORD}
+      - MONGO_DB_URL=${MONGO_DB_URL}
+      - MONGO_DB_HOST=${MONGO_DB_HOST}
+      - MONGO_DB_PORT=${MONGO_DB_PORT}
+      # Technology
+      - TECHNOLOGY=${TECHNOLOGY}
+      # Redis
+      - REDIS_URL=${REDIS_URL}
+      # Security
+      - HASH_SALT=${HASH_SALT}
+      # JWT
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+    depends_on:
+      - cluster-mongodb
+      - cache
+
+  cluster-mongodb:
     image: mongo:6.0.6
-    container_name: hexagonal
+    container_name: mongo_db
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: uhexagonal
-      MONGO_INITDB_ROOT_PASSWORD: secret123456
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_DB_PASSWORD}
     ports:
       - 27017:27017
     volumes:
@@ -20,8 +51,8 @@ services:
     volumes:
       - redis_data:/data
     environment:
-      REDIS_PASSWORD: secret123456
-    command: redis-server --requirepass secret123456
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: redis-server --requirepass ${REDIS_PASSWORD}
 
 volumes:
   mongodb_data:
