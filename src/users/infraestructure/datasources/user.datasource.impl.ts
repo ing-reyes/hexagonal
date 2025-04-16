@@ -15,11 +15,13 @@ import { User } from "../../domain/entities/user.entity";
 import { UserDatasource } from "../../domain/datasources/user.datasource";
 import { UserMapper } from "../mappers/user.mapper";
 import { UserModel } from "../../../data/mongodb/models/user.model";
+import { SaveLogger } from "../../../common/logging/save-logger";
 
 @injectable()
 export class UserDatasourceImpl implements UserDatasource {
 
     private readonly logger = new Logger(UserDatasourceImpl.name);
+    private readonly saveLogger = new SaveLogger(UserDatasourceImpl.name);
 
     constructor(
         @inject(TYPES.BcryptAdapter)
@@ -32,6 +34,7 @@ export class UserDatasourceImpl implements UserDatasource {
             return data;
         } catch (error) {
             this.logger.error(`Failed to cache data for key: ${key}`);
+            this.saveLogger.error(`Failed to cache data for key: ${key}`);
             throw error;
         }
     }
@@ -69,9 +72,12 @@ export class UserDatasourceImpl implements UserDatasource {
             }
         } catch (error) {
             if (error instanceof ManagerError) throw error;
+            if (error instanceof Error) {
+                this.saveLogger.error(error.message);
+                this.logger.error(error.message);
+            }
 
-            this.logger.error(error);
-            throw ManagerError.internalServerError();
+            throw error;
         }
     }
 
@@ -109,9 +115,12 @@ export class UserDatasourceImpl implements UserDatasource {
             return response;
         } catch (error) {
             if (error instanceof ManagerError) throw error;
+            if (error instanceof Error) {
+                this.saveLogger.error(error.message);
+                this.logger.error(error.message);
+            }
 
-            this.logger.error(error);
-            throw ManagerError.internalServerError();
+            throw error;
         }
     }
 
@@ -137,9 +146,12 @@ export class UserDatasourceImpl implements UserDatasource {
             return response;
         } catch (error) {
             if (error instanceof ManagerError) throw error;
+            if (error instanceof Error) {
+                this.saveLogger.error(error.message);
+                this.logger.error(error.message);
+            }
 
-            this.logger.error(error);
-            throw ManagerError.internalServerError();
+            throw error;
         }
     }
 
@@ -165,9 +177,12 @@ export class UserDatasourceImpl implements UserDatasource {
             return response;
         } catch (error) {
             if (error instanceof ManagerError) throw error;
+            if (error instanceof Error) {
+                this.saveLogger.error(error.message);
+                this.logger.error(error.message);
+            }
 
-            this.logger.error(error);
-            throw ManagerError.internalServerError();
+            throw error;
         }
     }
 
@@ -198,9 +213,12 @@ export class UserDatasourceImpl implements UserDatasource {
             };
         } catch (error) {
             if (error instanceof ManagerError) throw error;
+            if (error instanceof Error) {
+                this.saveLogger.error(error.message);
+                this.logger.error(error.message);
+            }
 
-            this.logger.error(error);
-            throw ManagerError.internalServerError();
+            throw error;
         }
     }
     async remove(id: string): Promise<ApiOneResponse<User>> {
@@ -225,9 +243,12 @@ export class UserDatasourceImpl implements UserDatasource {
             };
         } catch (error) {
             if (error instanceof ManagerError) throw error;
+            if (error instanceof Error) {
+                this.saveLogger.error(error.message);
+                this.logger.error(error.message);
+            }
 
-            this.logger.error(error);
-            throw ManagerError.internalServerError();
+            throw error;
         }
     }
 }
