@@ -20,7 +20,6 @@ import { Server } from '../../server';
 import { UsersMiddleware } from '../../users/infraestructure/presentation/middlewares/users.middleware';
 import { MongoDB } from '../../data/mongodb/mongo-db';
 import { ValidateIdMiddleware } from '../middlewares/validate-id.middleware';
-import { ValidatorsAdapter } from '../adapters/validators.adapter';
 import { UsersCacheMiddleware } from '../../users/infraestructure/presentation/middlewares/users-cache.middleware';
 import { BcryptAdapter } from '../adapters/bcrypt.adapter';
 import { SignInUseCase } from '../../auth/application/use-cases/sign-in.use-case';
@@ -83,7 +82,6 @@ container.bind<JWTAdapter>(TYPES.JWTAdapter).to(JWTAdapter);
 
 
 container.bind<ValidateIdMiddleware>(TYPES.ValidateIdMiddleware).to(ValidateIdMiddleware);
-container.bind<ValidatorsAdapter>(TYPES.ValidatorsAdapter).to(ValidatorsAdapter);
 container.bind<Handler>(TYPES.Handler).to(Handler);
 
 //*------------------------END COMMON---------------------------------------------------------
