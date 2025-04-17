@@ -44,7 +44,7 @@ export class AuthMiddleware {
                 return;
             }
 
-            req.body.user = UserMapper.fromUserModelToEntity(user.data);
+            req['user'] = UserMapper.fromUserModelToEntity(user.data);
 
             next();
         } catch (error) {
@@ -56,7 +56,7 @@ export class AuthMiddleware {
 
     validateRoles = (roles: UserRole[]) => {
         return (req: Request, res: Response, next: NextFunction) => {
-            const user = req.body.user;
+            const user = req['user'];
             if (!user) {
                 res.status(401).json({ statusCode: HttpStatus.UNAUTHORIZED, statusMsg: 'UNAUTHORIZED', error: 'Unauthorized' });
                 return;
