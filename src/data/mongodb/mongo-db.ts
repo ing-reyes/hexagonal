@@ -1,5 +1,4 @@
 import { injectable } from "inversify";
-import { ManagerError } from "../../common/errors/manager.error";
 import { Logger } from '../../common/logging/logger';
 import mongoose from "mongoose";
 import { SaveLogger } from "../../common/logging/save-logger";
@@ -24,7 +23,7 @@ export class MongoDB {
         } catch (error) {
             this.logger.error('Mongo Connection Error', MongoDB.name);
             this.saveLogger.error('Mongo Database Connection Error', 'mongo-db.ts');
-            throw ManagerError.requestTimeout('The servers are too busy to serve the request');
+            throw error;
         }
     }
 }
