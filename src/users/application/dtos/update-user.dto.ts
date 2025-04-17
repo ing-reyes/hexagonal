@@ -10,8 +10,8 @@ export class UpdateUserDto {
     ) {}
 
     static update( object: {[key:string]:any} ): [Record<string, string[]>?, UpdateUserDto?]{
-        const { name, email, password, roles } = object
-
+        const { id, name, email, password, roles, user } = object
+        
         let errors: Record<string, string[]> = {}
 
         if( name !== undefined && name.length == 0 ) {
@@ -28,6 +28,14 @@ export class UpdateUserDto {
 
         if (roles !== undefined && !roles.every((role: UserRole) => Object.values(UserRole).includes(role))) {
             errors = addErrorDto('roles', 'one or more roles are not valid', errors);
+        }
+
+        if (roles !== undefined && user?.id && id === user.id) {
+            errors = addErrorDto('roles', 'you cannot update your own roles', errors);
+        }
+
+        if(roles !== undefined && !user.roles.some((role: UserRole) => role===UserRole.ADMIN )){
+            errors = addErrorDto('roles', 'you do not have permission to update the role', errors)
         }
 
         if(Object.keys(errors).length > 0){
