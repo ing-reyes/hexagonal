@@ -57,6 +57,7 @@ export class UsersRoutes {
         logger.log('PATCH /api/users/:id', UsersRoutes.name)
         routes.patch('/:id', [
             this.validateIdMiddleware.isMongoId,
+            this.authMiddleware.validateJWT,
             this.usersMiddleware.validateUpdateUser
         ],
             this.usersController.update,
